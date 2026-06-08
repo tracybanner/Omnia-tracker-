@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="OmniaCare"/>
+<title>OmniaCare CRM</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#F2F2F7;color:#1C1C1E;}
+input,select,textarea,button{font-family:inherit;font-size:16px;}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid #E5E5EA;border-radius:10px;background:#fff;color:#1C1C1E;outline:none;-webkit-appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:#007AFF;box-shadow:0 0 0 3px rgba(0,122,255,.12);}
+textarea{resize:vertical;min-height:80px;}
+button{cursor:pointer;border:none;border-radius:10px;font-weight:600;}
+.bp{background:#007AFF;color:#fff;padding:12px 20px;}
+.bg{background:#F2F2F7;color:#007AFF;padding:11px 18px;border:1.5px solid #E5E5EA;}
+.bd{background:#FFF1F0;color:#FF3B30;padding:11px 16px;border:1.5px solid #FFD7D5;}
+.bs{padding:8px 14px;font-size:14px;}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.lbl{display:block;font-size:12px;font-weight:600;color:#8E8E93;letter-spacing:.04em;text-transform:uppercase;margin:14px 0 5px;}
+.page{display:none;padding:16px 16px 100px;}
+.page.active{display:block;}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;}
+.bb{background:#EFF6FF;color:#007AFF;} .bg2{background:#FFF8E6;color:#D97706;} .br{background:#FFF1F0;color:#FF3B30;} .bgr{background:#F2F2F7;color:#8E8E93;} .bge{background:#F0FDF4;color:#059669;}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.dg{background:#34C759;} .dy{background:#FF9500;} .dr{background:#FF3B30;}
+#hdr{position:sticky;top:0;z-index:100;background:#1C1C1E;padding:12px 16px 10px;}
+#tabs{position:fixed;bottom:0;left:0;right:0;background:#1C1C1E;border-top:1px solid rgba(255,255,255,.1);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.tab{flex:1;background:none;border:none;color:#8E8E93;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:10px;font-weight:500;}
+.tab.on{color:#007AFF;}
+.tab span:first-child{font-size:20px;}
+.ri{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid #F2F2F7;cursor:pointer;}
+.ri:last-child{border-bottom:none;}
+.rl{display:flex;align-items:center;gap:11px;flex:1;min-width:0;}
+.rn{font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rs{font-size:12px;color:#8E8E93;margin-top:2px;}
+.rr{text-align:right;flex-shrink:0;margin-left:10px;font-size:13px;color:#8E8E93;}
+#mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center;}
+#mo.on{display:flex;}
+#mb{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px 16px 40px;}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.mt{font-size:18px;font-weight:700;}
+.mx{background:#F2F2F7;border:none;border-radius:8px;width:32px;height:32px;font-size:18px;color:#8E8E93;cursor:pointer;}
+.mf{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+#toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);padding:11px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:300;white-space:nowrap;display:none;box-shadow:0 4px 20px rgba(0,0,0,.15);}
+.tok{background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;}
+.ter{background:#FFF1F0;color:#FF3B30;border:1px solid #FFD7D5;}
+.kg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.kc{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid #F2F2F7;}
+.st{font-size:11px;font-weight:700;color:#8E8E93;text-transform:uppercase;letter-spacing:.06em;}
+.li{padding:12px 16px;border-bottom:1px solid #F2F2F7;}
+.li:last-child{border-bottom:none;}
+.db{background:none;border:none;color:#C7C7CC;cursor:pointer;font-size:20px;padding:0 2px;flex-shrink:0;}
+.cp{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.pill{padding:5px 13px;border-radius:20px;border:1.5px solid #E5E5EA;font-size:12px;font-weight:600;background:#fff;color:#8E8E93;cursor:pointer;}
+.pill.on{background:#007AFF;border-color:#007AFF;color:#fff;}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);}
+.ch{padding:7px 0;text-align:center;font-size:11px;font-weight:700;color:#8E8E93;}
+.cc{border-right:1px solid #F2F2F7;border-bottom:1px solid #F2F2F7;min-height:52px;padding:5px 4px;cursor:pointer;}
+.cn{font-size:13px;color:#8E8E93;margin-bottom:2px;}
+.cn.td{color:#007AFF;font-weight:700;}
+.ct{background:#EFF6FF;}
+.ce{background:#007AFF;border-radius:3px;padding:1px 4px;font-size:10px;color:#fff;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ab{background:#FFF1F0;border:1px solid #FFD7D5;border-radius:12px;padding:13px 14px;margin-bottom:14px;}
+.fs{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:13px;margin-top:13px;}
+.fl{font-size:11px;font-weight:700;color:#007AFF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fu{margin-top:6px;padding:5px 9px;background:#F0FDF4;border-radius:7px;font-size:12px;font-weight:600;color:#059669;}
+/* BACKUP BANNER */
+#backup-bar{background:#1C1C1E;border-top:1px solid #3A3A3C;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:fixed;bottom:60px;left:0;right:0;z-index:99;display:none;}
+#backup-bar.show{display:flex;}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div style="font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#007AFF;">OmniaCare</div>
+      <div style="font-size:17px;font-weight:700;color:#fff;">Tracy Banner, MBA</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="ibadge" style="display:none;background:#FF3B30;color:#fff;border-radius:10px;font-size:11px;font-weight:700;padding:3px 8px;"></span>
+      <span id="ss" style="font-size:12px;font-weight:600;color:#30D158;">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<div id="page-dashboard" class="page active"></div>
+<div id="page-accounts"  class="page"></div>
+<div id="page-calendar"  class="page"></div>
+<div id="page-backup"    class="page">
+  <div style="margin-bottom:18px;">
+    <div style="font-size:11px;font-weight:600;color:#8E8E93;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;">Backup & Restore</div>
+    <div style="font-size:24px;font-weight:800;">Your Data</div>
+  </div>
+  <div class="card" style="padding:20px;margin-bottom:16px;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:8px;">📤 Export / Backup</div>
+    <p style="font-size:14px;color:#8E8E93;margin-bottom:16px;line-height:1.5;">Tap below to copy all your data. Paste it into Notes, email it to yourself, or save it anywhere. Use it to restore anytime.</p>
+    <button class="bp" style="width:100%;margin-bottom:10px;" onclick="exportData()">Copy Data to Clipboard</button>
+    <button class="bg" style="width:100%;" onclick="emailData()">Email Backup to Myself</button>
+  </div>
+  <div class="card" style="padding:20px;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:8px;">📥 Restore</div>
+    <p style="font-size:14px;color:#8E8E93;margin-bottom:12px;line-height:1.5;">Paste your previously copied backup data below, then tap Restore.</p>
+    <textarea id="restore-input" style="min-height:120px;font-size:13px;" placeholder="Paste your backup data here…"></textarea>
+    <button class="bp" style="width:100%;margin-top:12px;" onclick="restoreData()">Restore Data</button>
+  </div>
+</div>
+
+<div id="tabs">
+  <button class="tab on" onclick="switchTab('dashboard')"><span>⊟</span><span>Dashboard</span></button>
+  <button class="tab"    onclick="switchTab('accounts')"><span>⊞</span><span>Accounts</span></button>
+  <button class="tab"    onclick="switchTab('calendar')"><span>▦</span><span>Calendar</span></button>
+  <button class="tab"    onclick="switchTab('backup')"><span>☁️</span><span>Backup</span></button>
+</div>
+
+<div id="mo" onclick="closeMO(event)"><div id="mb"></div></div>
+<div id="toast"></div>
+
+<script>
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+const SK="OmniaCRM-v1";
+function sv(d){try{localStorage.setItem(SK,JSON.stringify(d));return true;}catch(e){return false;}}
+function ld(){try{const r=localStorage.getItem(SK);if(r){const p=JSON.parse(r);if(p&&p.accounts)return p;}}catch(e){}return null;}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const toS=()=>new Date().toISOString().split("T")[0];
+const fD=d=>d?new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"—";
+const dS=d=>{if(!d)return 999;return Math.floor((Date.now()-new Date(d+"T12:00:00"))/86400000);};
+const es=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+let _n=0;const uid=()=>"u"+Date.now()+(++_n);
+const dc=d=>d>=14?"dr":d>=7?"dy":"dg";
+const dl=d=>d===0?"Today":d+"d ago";
+
+// ── Seed ──────────────────────────────────────────────────────────────────────
+const SL=[
+  ["a01","Sunrise Hospital","Hospital",true],["a02","UMC Primary – Center of Southern NV Transition","Hospital",true],
+  ["a03","Centennial Hospital","Hospital",true],["a04","Summerlin Hospital","Hospital",true],
+  ["a05","San Martin Hospital","Hospital",false],["a06","PAM Centennial","Hospital",false],
+  ["a07","West Henderson Hospital","Hospital",false],["a08","AMG","SNF / Post-Acute",false],
+  ["a09","Canyon Vista Primary","SNF / Post-Acute",true],["a10","Advanced Summerlin","SNF / Post-Acute",false],
+  ["a11","Las Ventanas","SNF / Post-Acute",false],["a12","Life Care Center of So LV","SNF / Post-Acute",false],
+  ["a13","Mission Point","SNF / Post-Acute",false],["a14","Las Vegas Post Acute","SNF / Post-Acute",false],
+  ["a15","Marque Plaza","SNF / Post-Acute",false],["a16","Life Care Center","SNF / Post-Acute",false],
+  ["a17","Heights of Summerlin","SNF / Post-Acute",false],["a18","Oncology Institute of Hope","Oncology",true],
+  ["a19","The Oncology Institute","Oncology",true],["a20","Comp Cancer – Henderson, Horizon Ridge","Oncology",false],
+  ["a21","Hope Cancer Henderson","Oncology",false],["a22","Mana Health","Physician Group",true],
+  ["a23","Dr. Ruch","Physician",false],["a24","Dr. Jefic","Physician",false],
+  ["a25","Dr. Brian Lipman","Physician",false],["a26","Mark Adaimy","Physician",false],
+  ["a27","Ken Ares","Physician",false],["a28","George Baramidze","Physician",false],
+  ["a29","Ben Rey Ziva","Physician",false],["a30","Sal Borromeo","Physician",false],
+  ["a31","Robert Chuappoco","Physician",false],["a32","Robert Gao","Physician",false],
+  ["a33","Maria Habbi","Physician",false],["a34","Thomas Lambert","Physician",false],
+  ["a35","Rupiah Parekh","Physician",false],["a36","Ronald Shockley","Physician",false],
+  ["a37","Mark Steinhauer","Physician",false],["a38","Mark Taylor","Physician",false],
+  ["a39","Kevin Tsui","Physician",false],["a40","Dr. Kevin Tsui","Physician",false],
+  ["a41","Dr. Harpreet Tsui","Physician",false],["a42","Chukwudum Uche","Physician",false],
+  ["a43","V Veerappan","Physician",false],["a44","Todd Zang","Physician",false],
+  ["a45","Dr. Alfreda","Physician",false],["a46","Dr. Winegarden","Physician",false],
+  ["a47","Dr. Tanneroy","Physician",false],["a48","Dr. Parker","Physician",false],
+  ["a49","Dr. De Vera","Physician",false],["a50","Dr. Ferguson","Physician",false],
+  ["a51","Dr. Massimoto","Physician",false],["a52","Dr. Thacker","Physician",false],
+  ["a53","Dr. Phil Chen","Physician",false],["a54","Dr. Wen Liang","Physician",false],
+  ["a55","Nevada Kidney and HTN Centers","Specialty",false],["a56","Doyne Medical Center","Specialty",false],
+  ["a57","Aloha Med","Specialty",false],["a58","Dr. Gumina","Specialty",false],
+  ["a59","Faith Medical","Specialty",false],["a60","Los Pecos Apartments","Community",false],
+  ["a61","Sienna Senior Apartments","Community",false],["a62","Nevada Memory Care","Memory Care",false],
+  ["a63","Ace Medical","Primary Care",false],["a64","Centerwell Referrals – Pecos/Tropicana","Primary Care",false],
+  ["a65","Cornerstone Intermountain Health","Primary Care",false],["a66","Brighton Family Medicine","Primary Care",false],
+  ["a67","First Person Care Clinic","Primary Care",false],["a68","Archwell – Owens","Primary Care",false],
+  ["a69","Archwell – Craig","Primary Care",false],["a70","The Monarch","Other",false],
+  ["a71","Aegis","Other",false],["a72","Briens Group Home","Group Home",false],
+  ["a73","Pearl Group Home","Group Home",false],["a74","Sissies Group Home","Group Home",false],
+  ["a75","Roberts Group Home","Group Home",false],["a76","Joy Group Home","Group Home",false],
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let DB={accounts:[],events:[]};
+let curTab="dashboard",curAcc=null,catF="All";
+const now=new Date();let calY=now.getFullYear(),calM=now.getMonth();
+
+function commit(){
+  const ok=sv(DB);
+  const el=document.getElementById("ss");
+  el.textContent=ok?"✓ Saved":"⚠️ Error";
+  el.style.color=ok?"#30D158":"#FF9500";
+}
+
+function fa(id){return DB.accounts.find(a=>a.id===id);}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(function(){
+  const saved=ld();
+  if(saved){
+    DB=saved;
+    DB.accounts.forEach(a=>{if(!a.calls)a.calls=[];if(!a.patients)a.patients=[];if(!a.lastActivity)a.lastActivity=toS();});
+  } else {
+    DB.accounts=SL.map(([id,name,cat,hv])=>({id,name,cat,hv,contact:"",phone:"",email:"",lastActivity:toS(),calls:[],patients:[]}));
+    DB.events=[];
+    sv(DB);
+  }
+  rAll();
+})();
+
+function rAll(){rDash();rAcc();rCal();rBadge();}
+
+function rBadge(){
+  const n=DB.accounts.filter(a=>dS(a.lastActivity)>=14).length;
+  const el=document.getElementById("ibadge");
+  el.style.display=n>0?"inline":"none";
+  if(n>0)el.textContent=n+" inactive";
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(t){
+  curTab=t;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+t).classList.add("active");
+  document.querySelectorAll(".tab").forEach((el,i)=>el.classList.toggle("on",["dashboard","accounts","calendar","backup"][i]===t));
+  if(t==="accounts"&&!curAcc)rAcc();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function rDash(){
+  const ac=DB.accounts,ia=ac.filter(a=>dS(a.lastActivity)>=14);
+  const tc=ac.reduce((s,a)=>s+a.calls.length,0),tp=ac.reduce((s,a)=>s+a.patients.length,0);
+  const sorted=[...ac].sort((a,b)=>b.lastActivity.localeCompare(a.lastActivity)).slice(0,15);
+  document.getElementById("page-dashboard").innerHTML=`
+    <div style="margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:600;color:#8E8E93;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;">Dashboard</div>
+      <div style="font-size:24px;font-weight:800;">Good morning, Tracy</div>
+      <div style="font-size:13px;color:#8E8E93;margin-top:2px;">${new Date().toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}</div>
+    </div>
+    <div class="kg">
+      <div class="kc"><div style="font-size:22px;margin-bottom:6px;">🏥</div><div style="font-size:26px;font-weight:800;color:#007AFF;">${ac.length}</div><div style="font-size:11px;font-weight:600;color:#8E8E93;text-transform:uppercase;margin-top:4px;">Accounts</div></div>
+      <div class="kc"><div style="font-size:22px;margin-bottom:6px;">⭐</div><div style="font-size:26px;font-weight:800;color:#D97706;">${ac.filter(a=>a.hv).length}</div><div style="font-size:11px;font-weight:600;color:#8E8E93;text-transform:uppercase;margin-top:4px;">High Volume</div></div>
+      <div class="kc"><div style="font-size:22px;margin-bottom:6px;">📞</div><div style="font-size:26px;font-weight:800;color:#007AFF;">${tc}</div><div style="font-size:11px;font-weight:600;color:#8E8E93;text-transform:uppercase;margin-top:4px;">Calls Logged</div></div>
+      <div class="kc"><div style="font-size:22px;margin-bottom:6px;">👤</div><div style="font-size:26px;font-weight:800;color:#007AFF;">${tp}</div><div style="font-size:11px;font-weight:600;color:#8E8E93;text-transform:uppercase;margin-top:4px;">Referrals</div></div>
+    </div>
+    ${ia.length>0?`<div class="ab"><div style="font-weight:700;color:#FF3B30;font-size:14px;margin-bottom:8px;">🚨 ${ia.length} account${ia.length>1?"s":""} inactive 14+ days</div>${ia.map(a=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #FFD7D5;cursor:pointer;" onclick="openAcc('${a.id}')"><span style="font-weight:600;font-size:14px;">${es(a.name)}</span><span style="color:#FF3B30;font-size:13px;">${dS(a.lastActivity)}d ago</span></div>`).join("")}</div>`:""}
+    <div class="card" style="overflow:hidden;">
+      <div class="sh"><span class="st">Recent Activity</span></div>
+      ${sorted.map(a=>{const d=dS(a.lastActivity);return`<div class="ri" onclick="openAcc('${a.id}')"><div class="rl"><span class="dot ${dc(d)}"></span><div style="min-width:0;"><div class="rn">${es(a.name)}${a.hv?" ⭐":""}</div><div class="rs">${es(a.cat)}</div></div></div><div class="rr"><div style="color:${d>=14?"#FF3B30":"#8E8E93"}">${dl(d)}</div><div style="font-size:11px;color:#C7C7CC;">${a.calls.length}c·${a.patients.length}r</div></div></div>`;}).join("")}
+    </div>`;
+}
+
+// ── ACCOUNTS ──────────────────────────────────────────────────────────────────
+function rAcc(){
+  if(curAcc){rDetail();return;}
+  const cats=["All",...[...new Set(DB.accounts.map(a=>a.cat||"Other"))].sort()];
+  const srch=document.getElementById("asrch")?.value.toLowerCase()||"";
+  const fil=DB.accounts.filter(a=>{
+    const ms=a.name.toLowerCase().includes(srch)||(a.contact||"").toLowerCase().includes(srch);
+    const mc=catF==="All"||(a.cat||"Other")===catF;
+    return ms&&mc;
+  });
+  document.getElementById("page-accounts").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;">
+      <div><div style="font-size:11px;font-weight:600;color:#8E8E93;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;">Accounts</div><div style="font-size:24px;font-weight:800;">All Accounts</div></div>
+      <button class="bp bs" onclick="openM('newAcc')">+ New</button>
+    </div>
+    <input id="asrch" placeholder="Search…" value="${es(srch)}" oninput="rAcc()" style="margin-bottom:10px;"/>
+    <div class="cp">${cats.map(c=>`<button class="pill${catF===c?" on":""}" onclick="setCat('${es(c)}')">${es(c)}</button>`).join("")}</div>
+    <div style="font-size:12px;color:#8E8E93;margin-bottom:10px;">${fil.length} accounts</div>
+    <div class="card" style="overflow:hidden;">
+      ${fil.length===0?`<p style="padding:2rem;text-align:center;color:#8E8E93;">No accounts found.</p>`:""}
+      ${fil.map(a=>{const d=dS(a.lastActivity);return`<div class="ri" onclick="openAcc('${a.id}')"><div class="rl"><span class="dot ${dc(d)}"></span><div style="min-width:0;"><div class="rn">${es(a.name)}${a.hv?" ⭐":""}${d>=14?` <span class="badge br" style="font-size:10px;">Inactive</span>`:""}</div><div class="rs">${es(a.cat)}${a.contact?" · "+es(a.contact):""}</div></div></div><div class="rr"><div style="color:${d>=14?"#FF3B30":"#8E8E93"}">${dl(d)}</div><div style="font-size:11px;color:#C7C7CC;">${a.calls.length}c·${a.patients.length}r</div></div></div>`;}).join("")}
+    </div>`;
+}
+
+function setCat(c){catF=c;rAcc();}
+
+function openAcc(id){curAcc=id;switchTab("accounts");rDetail();}
+
+function rDetail(){
+  const a=fa(curAcc);if(!a){curAcc=null;rAcc();return;}
+  const d=dS(a.lastActivity);
+  document.getElementById("page-accounts").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <button class="bg bs" onclick="backAcc()">← Back</button>
+      <button class="bd bs" onclick="delAcc('${a.id}')">Delete</button>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">${a.hv?`<span class="badge bg2">⭐ High Volume</span>`:""} ${d>=14?`<span class="badge br">🚨 Inactive ${d}d</span>`:""} <span class="badge bgr">${es(a.cat)}</span></div>
+      <div style="font-size:22px;font-weight:800;line-height:1.2;margin-bottom:6px;">${es(a.name)}</div>
+      ${a.contact?`<div style="font-size:14px;color:#8E8E93;">${es(a.contact)}${a.phone?" · "+es(a.phone):""}</div>`:""}
+      ${a.email?`<div style="font-size:14px;color:#8E8E93;">${es(a.email)}</div>`:""}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <button class="bp bs" onclick="openM('logCall')">📞 Log Call</button>
+      <button class="bp bs" onclick="openM('addPat')">👤 Add Referral</button>
+      <button class="bg bs" onclick="openM('editAcc')">Edit</button>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:#8E8E93;margin-bottom:14px;cursor:pointer;">
+      <input type="checkbox" ${a.hv?"checked":""} onchange="togHV('${a.id}',this.checked)"/> High Volume
+    </label>
+    <div class="card" style="overflow:hidden;margin-bottom:12px;">
+      <div class="sh"><span class="st">Call Log</span><span class="badge bb">${a.calls.length}</span></div>
+      <div style="padding:0 16px;">
+        ${a.calls.length===0?`<p style="padding:14px 0;color:#8E8E93;font-size:14px;">No calls yet.</p>`:""}
+        ${a.calls.map(c=>`<div style="padding:12px 0;border-bottom:1px solid #F2F2F7;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <span style="font-weight:600;font-size:15px;">${fD(c.date)}</span>
+            <button class="db" onclick="delCall('${c.id}')">×</button>
+          </div>
+          ${c.duration?`<div style="font-size:13px;color:#8E8E93;margin-top:2px;">⏱ ${es(c.duration)}</div>`:""}
+          ${c.outcome?`<div style="font-size:13px;color:#007AFF;margin-top:2px;">→ ${es(c.outcome)}</div>`:""}
+          ${c.notes?`<div style="font-size:13px;color:#8E8E93;margin-top:4px;line-height:1.5;">${es(c.notes)}</div>`:""}
+          ${c.followUpDate?`<div class="fu">📅 Follow-up ${fD(c.followUpDate)}${c.followUpNote?" — "+es(c.followUpNote):""}</div>`:""}
+        </div>`).join("")}
+      </div>
+    </div>
+    <div class="card" style="overflow:hidden;">
+      <div class="sh"><span class="st">Patient Referrals</span><span class="badge bb">${a.patients.length}</span></div>
+      <div style="padding:0 16px;">
+        ${a.patients.length===0?`<p style="padding:14px 0;color:#8E8E93;font-size:14px;">No referrals yet.</p>`:""}
+        ${a.patients.map(p=>`<div style="padding:12px 0;border-bottom:1px solid #F2F2F7;">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-weight:600;font-size:15px;">${es(p.name)}</span>
+            <button class="db" onclick="delPat('${p.id}')">×</button>
+          </div>
+          <div style="font-size:13px;color:#8E8E93;margin-top:2px;">Referred ${fD(p.date)}</div>
+          ${p.note?`<div style="font-size:13px;color:#8E8E93;margin-top:4px;">${es(p.note)}</div>`:""}
+        </div>`).join("")}
+      </div>
+    </div>`;
+}
+
+function backAcc(){curAcc=null;rAcc();}
+function togHV(id,v){const a=fa(id);if(!a)return;a.hv=v;commit();rDetail();}
+function delAcc(id){if(!confirm("Delete this account?"))return;DB.accounts=DB.accounts.filter(a=>a.id!==id);commit();curAcc=null;rAcc();rDash();rBadge();toast("Account deleted");}
+function delCall(cid){const a=fa(curAcc);if(!a)return;a.calls=a.calls.filter(c=>c.id!==cid);commit();rDetail();rDash();}
+function delPat(pid){const a=fa(curAcc);if(!a)return;a.patients=a.patients.filter(p=>p.id!==pid);commit();rDetail();rDash();}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function rCal(){
+  const dim=new Date(calY,calM+1,0).getDate(),fd=new Date(calY,calM,1).getDay();
+  const me=DB.events.filter(e=>{const d=new Date(e.date+"T12:00:00");return d.getFullYear()===calY&&d.getMonth()===calM;});
+  const ts=toS();
+  let cells="";
+  for(let i=0;i<fd;i++)cells+=`<div class="cc" style="background:#F9F9F9;"></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const evs=me.filter(e=>e.date===ds);const isT=ds===ts;
+    cells+=`<div class="cc${isT?" ct":""}" onclick="openM('addEvent','${ds}')">
+      <div class="cn${isT?" td":""}">${d}</div>
+      ${evs.slice(0,2).map(e=>`<div class="ce">${es(e.title)}</div>`).join("")}
+      ${evs.length>2?`<div style="font-size:10px;color:#8E8E93;">+${evs.length-2}</div>`:""}
+    </div>`;
+  }
+  const el=[...me].sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById("page-calendar").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;">
+      <div><div style="font-size:11px;font-weight:600;color:#8E8E93;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;">Calendar</div><div style="font-size:24px;font-weight:800;">${MN[calM]} ${calY}</div></div>
+      <div style="display:flex;gap:8px;"><button class="bg bs" onclick="chM(-1)">‹</button><button class="bg bs" onclick="chM(1)">›</button><button class="bp bs" onclick="openM('addEvent','')">+ Event</button></div>
+    </div>
+    <div class="card" style="overflow:hidden;margin-bottom:14px;">
+      <div class="cg" style="border-bottom:1px solid #F2F2F7;">${["S","M","T","W","T","F","S"].map(w=>`<div class="ch">${w}</div>`).join("")}</div>
+      <div class="cg">${cells}</div>
+    </div>
+    <div class="card" style="overflow:hidden;">
+      <div class="sh"><span class="st">Events This Month</span></div>
+      ${el.length===0?`<p style="padding:14px 16px;color:#8E8E93;font-size:14px;">No events.</p>`:""}
+      ${el.map(e=>{const an=DB.accounts.find(a=>a.id===e.accountId)?.name||"";return`<div style="padding:12px 16px;border-bottom:1px solid #F2F2F7;display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div style="font-weight:600;font-size:15px;">${es(e.title)}</div><div style="font-size:13px;color:#8E8E93;">${fD(e.date)}${e.time?" · "+es(e.time):""}${an?" · "+es(an):""}</div>${e.note?`<div style="font-size:13px;color:#8E8E93;">${es(e.note)}</div>`:""}</div>
+        <button class="db" onclick="delEv('${e.id}')">×</button>
+      </div>`;}).join("")}
+    </div>`;
+}
+
+function chM(d){calM+=d;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}rCal();}
+function delEv(id){DB.events=DB.events.filter(e=>e.id!==id);commit();rCal();}
+
+// ── BACKUP / RESTORE ─────────────────────────────────────────────────────────
+function exportData(){
+  const str=JSON.stringify(DB);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(str).then(()=>toast("✅ Copied! Paste into Notes or email to save.")).catch(()=>fallbackCopy(str));
+  } else { fallbackCopy(str); }
+}
+function fallbackCopy(str){
+  const ta=document.createElement("textarea");
+  ta.value=str;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");toast("✅ Copied! Paste into Notes to save.");}
+  catch(e){toast("⚠️ Copy failed — select all text below manually","err");}
+  document.body.removeChild(ta);
+}
+function emailData(){
+  const str=encodeURIComponent(JSON.stringify(DB));
+  window.location.href=`mailto:?subject=OmniaCare CRM Backup ${new Date().toLocaleDateString()}&body=${str}`;
+}
+function restoreData(){
+  const txt=document.getElementById("restore-input")?.value.trim();
+  if(!txt){toast("⚠️ Please paste your backup data first","err");return;}
+  try{
+    const p=JSON.parse(txt);
+    if(!p||!p.accounts){toast("⚠️ Invalid backup data","err");return;}
+    DB=p;
+    DB.accounts.forEach(a=>{if(!a.calls)a.calls=[];if(!a.patients)a.patients=[];});
+    commit();rAll();
+    document.getElementById("restore-input").value="";
+    toast("✅ Data restored successfully!");
+  }catch(e){toast("⚠️ Could not read backup data","err");}
+}
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+const CATS=["Hospital","SNF / Post-Acute","Oncology","Physician","Physician Group","Specialty","Primary Care","Community","Memory Care","Group Home","Other"];
+function openM(t,x){
+  const b=document.getElementById("mb");
+  if(t==="newAcc"){b.innerHTML=`<div class="mh"><div class="mt">New Account</div><button class="mx" onclick="closeM()">×</button></div>
+    <label class="lbl">Account Name *</label><input id="m1" placeholder="Practice or provider name" autocomplete="off"/>
+    <label class="lbl">Primary Contact</label><input id="m2" autocomplete="off"/>
+    <div class="tc"><div><label class="lbl">Phone</label><input id="m3" autocomplete="off"/></div><div><label class="lbl">Email</label><input id="m4" autocomplete="off"/></div></div>
+    <label class="lbl">Category</label><select id="m5"><option value="">— Select —</option>${CATS.map(c=>`<option>${c}</option>`).join("")}</select>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:15px;cursor:pointer;"><input type="checkbox" id="m6"/> ⭐ High Volume</label>
+    <div class="mf"><button class="bg" onclick="closeM()">Cancel</button><button class="bp" onclick="doNew()">Add Account</button></div>`;}
+  else if(t==="editAcc"){const a=fa(curAcc);if(!a)return;b.innerHTML=`<div class="mh"><div class="mt">Edit Account</div><button class="mx" onclick="closeM()">×</button></div>
+    <label class="lbl">Name</label><input id="m1" value="${es(a.name)}" autocomplete="off"/>
+    <label class="lbl">Contact</label><input id="m2" value="${es(a.contact)}" autocomplete="off"/>
+    <div class="tc"><div><label class="lbl">Phone</label><input id="m3" value="${es(a.phone)}" autocomplete="off"/></div><div><label class="lbl">Email</label><input id="m4" value="${es(a.email)}" autocomplete="off"/></div></div>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:15px;cursor:pointer;"><input type="checkbox" id="m6" ${a.hv?"checked":""}/> ⭐ High Volume</label>
+    <div class="mf"><button class="bg" onclick="closeM()">Cancel</button><button class="bp" onclick="doEdit()">Save</button></div>`;}
+  else if(t==="logCall"){b.innerHTML=`<div class="mh"><div class="mt">Log Call</div><button class="mx" onclick="closeM()">×</button></div>
+    <div class="tc"><div><label class="lbl">Date</label><input type="date" id="m1" value="${toS()}"/></div><div><label class="lbl">Duration</label><input id="m2" placeholder="e.g. 15 min" autocomplete="off"/></div></div>
+    <label class="lbl">Outcome</label><input id="m3" placeholder="Left voicemail, scheduled visit…" autocomplete="off"/>
+    <label class="lbl">Notes</label><textarea id="m4" placeholder="Call notes…"></textarea>
+    <div class="fs"><div class="fl">📅 Schedule Follow-Up</div>
+    <div class="tc"><div><label class="lbl" style="margin-top:0;">Follow-Up Date</label><input type="date" id="m5"/></div><div><label class="lbl" style="margin-top:0;">Note</label><input id="m6" placeholder="Optional…" autocomplete="off"/></div></div></div>
+    <div class="mf"><button class="bg" onclick="closeM()">Cancel</button><button class="bp" onclick="doLog()">Save Call</button></div>`;}
+  else if(t==="addPat"){b.innerHTML=`<div class="mh"><div class="mt">Add Referral</div><button class="mx" onclick="closeM()">×</button></div>
+    <label class="lbl">Patient Name *</label><input id="m1" placeholder="First Last" autocomplete="off"/>
+    <label class="lbl">Referral Date</label><input type="date" id="m2" value="${toS()}"/>
+    <label class="lbl">Notes</label><textarea id="m3" placeholder="Condition, insurer, urgency…"></textarea>
+    <div class="mf"><button class="bg" onclick="closeM()">Cancel</button><button class="bp" onclick="doPat()">Add Referral</button></div>`;}
+  else if(t==="addEvent"){const ao=DB.accounts.map(a=>`<option value="${a.id}">${es(a.name)}</option>`).join("");
+    b.innerHTML=`<div class="mh"><div class="mt">Add Event</div><button class="mx" onclick="closeM()">×</button></div>
+    <label class="lbl">Title *</label><input id="m1" placeholder="e.g. Account visit" autocomplete="off"/>
+    <div class="tc"><div><label class="lbl">Date *</label><input type="date" id="m2" value="${x||toS()}"/></div><div><label class="lbl">Time</label><input type="time" id="m3"/></div></div>
+    <label class="lbl">Linked Account</label><select id="m4"><option value="">— None —</option>${ao}</select>
+    <label class="lbl">Notes</label><textarea id="m5" style="min-height:60px;"></textarea>
+    <div class="mf"><button class="bg" onclick="closeM()">Cancel</button><button class="bp" onclick="doEv()">Add Event</button></div>`;}
+  document.getElementById("mo").classList.add("on");
+  setTimeout(()=>{const first=b.querySelector("input:not([type=checkbox]):not([type=date]):not([type=time])");if(first)first.focus();},300);
+}
+
+function closeMO(e){if(e.target===document.getElementById("mo"))closeM();}
+function closeM(){document.getElementById("mo").classList.remove("on");}
+function gv(id){const el=document.getElementById(id);return el?el.value.trim():"";}
+
+function doNew(){const n=gv("m1");if(!n)return;const a={id:uid(),name:n,cat:gv("m5")||"Other",contact:gv("m2"),phone:gv("m3"),email:gv("m4"),hv:document.getElementById("m6")?.checked||false,lastActivity:toS(),calls:[],patients:[]};DB.accounts.push(a);commit();closeM();rAcc();rDash();rBadge();toast(n+" added");}
+function doEdit(){const a=fa(curAcc);if(!a)return;a.name=gv("m1")||a.name;a.contact=gv("m2");a.phone=gv("m3");a.email=gv("m4");a.hv=document.getElementById("m6")?.checked||false;commit();closeM();rDetail();rDash();toast("Account updated");}
+function doLog(){const a=fa(curAcc);if(!a)return;const fu=gv("m5");const c={id:uid(),date:gv("m1")||toS(),duration:gv("m2"),outcome:gv("m3"),notes:gv("m4"),followUpDate:fu,followUpNote:gv("m6")};a.calls.unshift(c);if(c.date>a.lastActivity)a.lastActivity=c.date;if(fu)DB.events.push({id:uid(),title:"Follow-up: "+a.name,date:fu,time:"",accountId:a.id,note:c.followUpNote||"Follow-up from "+fD(c.date)});commit();closeM();rDetail();rDash();rCal();rBadge();toast(fu?"Call logged · Follow-up added":"Call logged");}
+function doPat(){const a=fa(curAcc);if(!a)return;const n=gv("m1");if(!n)return;a.patients.unshift({id:uid(),name:n,date:gv("m2")||toS(),note:gv("m3")});commit();closeM();rDetail();rDash();toast("Referral added");}
+function doEv(){const t=gv("m1"),d=gv("m2");if(!t||!d)return;DB.events.push({id:uid(),title:t,date:d,time:gv("m3"),accountId:gv("m4"),note:gv("m5")});commit();closeM();rCal();toast("Event added");}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+let tt;
+function toast(msg,type="ok"){const el=document.getElementById("toast");el.textContent=msg;el.className=type==="err"?"ter":"tok";el.style.display="block";clearTimeout(tt);tt=setTimeout(()=>el.style.display="none",3500);}
+</script>
+</body>
+</html>
